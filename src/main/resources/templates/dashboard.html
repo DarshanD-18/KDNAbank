@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(~{::body})">
+
+<body>
+
+<h3>Official Dashboard</h3>
+
+<div class="row mt-4">
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6>Customer Registration</h6>
+                <a href="/official/customer/register"
+                   class="btn btn-outline-primary btn-sm">Open</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6>KYC</h6>
+                <a href="/official/customer/kyc"
+                   class="btn btn-outline-primary btn-sm">Open</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6>Account Creation</h6>
+                <a href="/official/accounts/create"
+                   class="btn btn-outline-primary btn-sm">Open</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6>Fund Transfer</h6>
+                <a href="/official/transfer"
+                   class="btn btn-outline-primary btn-sm">Open</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

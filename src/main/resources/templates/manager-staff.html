@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Staff Details</title>
+</head>
+<body>
+
+<h2>Bank Official Staff Details</h2>
+
+<table border="1">
+    <tr>
+        <th>Username</th>
+        <th>Status</th>
+    </tr>
+
+    <tr th:each="staff : ${staffList}">
+        <td th:text="${staff.username}"></td>
+        <td th:text="${staff.approved ? 'Approved' : 'Pending'}"></td>
+    </tr>
+</table>
+
+<br>
+<a href="/manager/dashboard">Back to Dashboard</a>
+
+</body>
+</html>

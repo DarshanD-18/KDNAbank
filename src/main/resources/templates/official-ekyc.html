@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Official eKYC - NEXA BANK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/theme.css}" rel="stylesheet">
+</head>
+<body class="bg-light font-poppins">
+<div th:replace="fragments/layout :: navbar"></div>
+
+<div class="container mt-4">
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <div class="card p-4">
+        <h4>Submit Customer eKYC</h4>
+        <form th:action="@{/official/ekyc}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Customer</label>
+                <select name="customerId" class="form-select" required>
+                    <option th:each="c : ${customers}" th:value="${c.id}" th:text="${c.name + ' - ' + c.mobileNumber}"></option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Aadhaar Number</label>
+                    <input name="aadhaarNumber" class="form-control" />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">PAN Number</label>
+                    <input name="panNumber" class="form-control" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Aadhaar Document (PDF/JPG)</label>
+                <input type="file" name="aadhaarFile" class="form-control" accept=".pdf,image/*" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">PAN Document (PDF/JPG)</label>
+                <input type="file" name="panFile" class="form-control" accept=".pdf,image/*" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Address Proof (PDF/JPG)</label>
+                <input type="file" name="addressProof" class="form-control" accept=".pdf,image/*" />
+            </div>
+
+            <button class="btn btn-primary">Submit eKYC</button>
+        </form>
+    </div>
+</div>
+
+<div th:replace="fragments/layout :: footer"></div>
+</body>
+</html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer eKYC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <div class="card mx-auto mt-4" style="max-width:600px">
+        <div class="card-body">
+            <h5>Customer eKYC</h5>
+            <form th:action="@{/official/ekyc/search}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Customer ID</label>
+                    <input type="number" name="customerId" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Or Mobile Number</label>
+                    <input type="text" name="mobileNumber" class="form-control" />
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-warning text-white">Search</button>
+                    <a href="/official/dashboard" class="btn btn-secondary">Back</a>
+                </div>
+            </form>
+            <p th:text="${error}" class="text-danger mt-2"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<body>
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" th:href="${#authorization.expression('hasRole(''MANAGER'')') } ? '/manager/dashboard' : '/official/dashboard'">
+                🏦 NEXA BANK
+            </a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
+                        <a class="nav-link" href="/manager/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
+                        <a class="nav-link" href="/manager/requests">Approve Officials</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('MANAGER')">
+                        <a class="nav-link" href="/manager/staff">Staff</a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="hasRole('OFFICIAL')">
+                        <a class="nav-link" href="/official/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('OFFICIAL')">
+                        <a class="nav-link" href="/official/accounts">Accounts</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('OFFICIAL')">
+                        <a class="nav-link" href="/official/accounts/create">Create Account</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('OFFICIAL')">
+                        <a class="nav-link" href="/official/transfer">Transfer</a>
+                    </li>
+                </ul>
+
+                <a class="btn btn-light" href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

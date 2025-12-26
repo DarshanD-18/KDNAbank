@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pending Official Requests</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="mb-0">Pending Official Requests</h4>
+            <small class="text-muted">Review and approve official access requests</small>
+        </div>
+        <a href="/manager/dashboard" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Username</th>
+                    <th>Requested On</th>
+                    <th style="width:220px">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${requests}">
+                    <td th:text="${user.username}">username</td>
+                    <td th:text="${user.createdAt}">-</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <form th:action="@{/manager/approve/{id}(id=${user.id})}" method="post" th:attr="id=${'approveForm-' + user.id}">
+                                <button type="submit" class="d-none">Approve</button>
+                            </form>
+                            <form th:action="@{/manager/reject/{id}(id=${user.id})}" method="post" th:attr="id=${'rejectForm-' + user.id}">
+                                <button type="submit" class="d-none">Reject</button>
+                            </form>
+
+                            <button type="button" class="btn btn-success btn-sm px-3 open-confirm"
+                                    th:attr="data-form-id=${'approveForm-' + user.id};data-username=${user.username};data-action='Approve'">Approve</button>
+
+                            <button type="button" class="btn btn-outline-danger btn-sm px-3 open-confirm"
+                                    th:attr="data-form-id=${'rejectForm-' + user.id};data-username=${user.username};data-action='Reject'">Reject</button>
+
+                            <a th:href="@{'/manager/staff'(username=${user.username})}" class="btn btn-outline-secondary btn-sm">View</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(requests)}">
+                    <td colspan="3" class="text-center py-4 text-muted">No pending requests</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<!-- Confirmation modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirm action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmText">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmSubmit" class="btn btn-primary btn-sm">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        const modalEl = document.getElementById('confirmModal');
+        const bsModal = new bootstrap.Modal(modalEl);
+        let targetFormId = null;
+
+        document.querySelectorAll('.open-confirm').forEach(btn => {
+            btn.addEventListener('click', function(){
+                targetFormId = this.getAttribute('data-form-id');
+                const username = this.getAttribute('data-username') || '';
+                const action = this.getAttribute('data-action') || 'Proceed';
+                document.getElementById('confirmText').textContent = action + " '" + username + "'?";
+                bsModal.show();
+            });
+        });
+
+        document.getElementById('confirmSubmit').addEventListener('click', function(){
+            if(!targetFormId) return bsModal.hide();
+            const form = document.getElementById(targetFormId);
+            if(form) form.submit();
+            bsModal.hide();
+        });
+    })();
+</script>
