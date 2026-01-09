@@ -33,10 +33,17 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/official/request", "/css/**", "/js/**").permitAll()
+                    .requestMatchers(
+                            "/login",
+                            "/favicon.png",
+                            "/favicon.ico",
+                            "/official/request",
+                            "/css/**",
+                            "/js/**"
+                    ).permitAll()
                 .requestMatchers("/manager/**").hasRole("MANAGER")
                 .requestMatchers("/official/**").hasRole("OFFICIAL")
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             )
             .formLogin(form -> form
                 .loginPage("/login")
